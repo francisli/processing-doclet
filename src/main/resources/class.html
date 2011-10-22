@@ -1,0 +1,132 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>${class.name()} / ${libraryName}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="Author" content="<#list class.tags("author") as author>${author.text()}<#if author_has_next>, </#if></#list>" />
+              <link href="style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body id="Library-ref" onload="" >
+
+        <!-- ==================================== PAGE ============================ --> 
+        <div id="container">
+
+            <!-- ==================================== HEADER ============================ --> 
+            <div id="header">
+
+            </div> 
+
+            <a id="TOP" name="TOP"></a>
+
+            <!-- ==================================== CONTENT - Headers ============================ -->
+            <div class="content">
+
+                <span class="lib-nav">
+                    <a href="index.html">Library</a>
+                </span>
+
+                <table cellpadding="0" cellspacing="0" border="0" class="ref-item">
+                    <tr class="name-row">
+                        <th scope="row"><!--*-->Name<!--*--></th>
+                        <td><h3>${class.name()}</h3></td>
+                    </tr>
+
+                    <#assign examples = class.tags("example")>
+                    <#if examples?has_content >
+                    <tr class="">
+                        <th scope="row"><!--*-->Examples<!--*--></th>
+                        <td>
+                            <#list examples as example>
+                            <div class="example"><pre>${Utils.trimLines(example.text())}</pre></div>
+                            </#list>
+                        </td>
+                    </tr>
+                    </#if>
+
+                    <tr class="">
+                        <th scope="row"><!--*-->Description<!--*--></th>
+                        <td>${class.commentText()}</td>
+                    </tr>
+
+                    <#assign fields = class.fields()>
+                    <#if fields?has_content>
+                    <tr class="">
+                        <th scope="row">Fields</th>
+                        <td><table cellpadding="0" cellspacing="0" border="0">
+                                <#list fields as field>
+                                <tr class="">
+                                    <th scope="row"><a href="${class.name()}_${field.name()}.html">${field.name()}</a></th>
+                                    <td>${field.commentText()}</td>
+                                </tr>
+                                </#list>
+                            </table></td>
+                    </tr>
+                    </#if>
+
+                    <#assign methods = Utils.sortedMethods(class.methods())>
+                    <#if methods?has_content>
+                    <tr class="">
+                        <th scope="row"><!--*-->Methods<!--*--></th>
+                        <td><table cellpadding="0" cellspacing="0" border="0">
+                                <#list methods as method>
+                                <tr class="">
+                                    <th scope="row"><a href="${class.name()}_${method.name()}_.html">${method.name()}()</a></th>
+                                    <td><#list method.firstSentenceTags() as tag>${tag.text()}</#list></td>
+                                </tr>
+                                </#list>
+                            </table></td>
+                    </tr>
+                    </#if>
+
+                    <#assign constructors = class.constructors()>
+                    <#if constructors?has_content>
+                    <tr class="">
+                        <th scope="row"><!--*-->Constructor<!--*--></th>
+                        <td><pre><#list constructors as constructor>${constructor.name()}(<#list constructor.parameters() as param><kbd>${param.name()}</kbd><#if param_has_next>, </#if></#list>)
+</#list></pre></td>
+                    </tr>
+                    </#if>
+
+                    <#assign params = Utils.constructorParameters(class.constructors())>
+                    <#if params?has_content>
+                    <tr class="">
+                        <th scope="row"><!--*-->Parameters<!--*--></th>
+                        <td><table cellpadding="0" cellspacing="0" border="0">
+                                <#list params as param>
+                                <tr class="">
+                                    <th scope="row">${param.parameterName()}</th>
+                                    <td>${param.parameterComment()}</td>
+                                </tr>
+                                </#list>
+                            </table></td>
+                    </tr>
+                    </#if>
+
+                    <#assign usages = class.tags("usage")>
+                    <#if usages?has_content>
+                    <tr class="">
+                        <th scope="row"><!--*-->Usage<!--*--></th>
+                        <td><#list usages as usage>${usage.text()}<#if usage_has_next>, </#if></#list></td>
+                    </tr>
+                    </#if>
+                </table>
+
+                Updated on ${timestamp}<br /><br />
+
+                <!-- Creative Commons License -->
+
+                <div class="license">
+                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.0/"><img alt="Creative Commons License" border="0" src="http://creativecommons.org/images/public/somerights20.gif" /></a>
+                </div>
+
+            </div>
+
+            <!-- ==================================== FOOTER ============================ --> 
+            <div id="footer">
+
+            </div>
+
+        </div>
+    </body>
+</html>

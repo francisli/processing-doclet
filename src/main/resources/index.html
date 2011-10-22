@@ -1,19 +1,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <title>${package.tags("name")[0].text()}</title>
+        <title>${libraryName}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="Author" content="<#list package.tags("author") as author>${author.text()}<#if author_has_next>, </#if></#list>" />
-              <link href="style.css" rel="stylesheet" type="text/css" />
+        <link href="style.css" rel="stylesheet" type="text/css" />
     </head>
     <body id="Libraries" onload="" >
 
         <!-- ==================================== PAGE ============================ --> 
         <div id="container">
-            
+
             <!-- ==================================== HEADER ============================ --> 
             <div id="header">
-                
+
             </div> 
 
             <a id="TOP" name="TOP"></a>
@@ -21,7 +21,7 @@
             <!-- ==================================== CONTENT - Headers ============================ -->
             <div class="content">
 
-                <div class="librarytitle"><h3>${package.tags("name")[0].text()}</h3></div>
+                <div class="librarytitle"><h3>${libraryName}</h3></div>
 
                 <div class="colone-alt">
                     ${package.commentText()}
@@ -36,14 +36,22 @@
                             <br />
                             <br />
                             <a href="${class.name()}.html">${class.name()}</a><br />
-                            <#list Utils.sortedMethodNames(class.methods()) as method>
-                            <a href="${class.name()}_${method}_.html">${method}()</a><br />
+                            <#list Utils.sortedMethods(class.methods()) as method>
+                            <a href="${class.name()}_${method.name()}_.html">${method.name()}()</a><br />
                             </#list>
                         </p>
                         </#list>
                     </p>
                 </div>
 
+
+                Updated on ${timestamp}<br /><br />
+
+                <!-- Creative Commons License -->
+
+                <div class="license">
+                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.0/"><img alt="Creative Commons License" border="0" src="http://creativecommons.org/images/public/somerights20.gif" /></a>
+                </div>
 
             </div>
 

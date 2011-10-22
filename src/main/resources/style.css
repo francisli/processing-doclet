@@ -410,7 +410,7 @@ p.exhibition-nav { margin-top: 20px; margin-bottom: 10px; }
 .ref-notice { margin: 1.5em 0 2.5em 0; color: #006699; clear: both; margin-right: 40px;}
 
 .ref-item { margin-bottom: 60px; }
-.ref-item th { width: 100px; font-weight: normal; text-align: left; vertical-align: top; }
+.ref-item th { width: 90px; padding-right: 10px; font-weight: normal; text-align: left; vertical-align: top; }
 .ref-item td { vertical-align: top; padding-bottom: 2em; }
 .ref-item td h3 { margin: 0; }
 pre { margin: 0; }
@@ -555,7 +555,7 @@ h2 { margin-bottom: 0; margin-top: 0;}
 	margin-bottom: 10px; 
 	margin-left: -30px; 
 	padding: 7px 0 3px 30px; 
-	background: url(/img/back_off.gif) no-repeat 
+	background: url(back_off.gif) no-repeat 
 }
 
 #Tools-index pre { margin-left: 30px; margin-bottom: 30px; }
@@ -639,7 +639,7 @@ h2 { margin-bottom: 0; margin-top: 0;}
 	margin-bottom: 10px; 
 	margin-left: -30px; 
 	padding: 7px 0 3px 30px; 
-	background: url(/img/back_off.gif) no-repeat 
+	background: url(back_off.gif) no-repeat 
 }
 
 #Libraries pre { margin-left: 30px; margin-bottom: 30px; }
