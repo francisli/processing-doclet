@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class ProcessingDoclet {
     
-    public static List sortedMethods(MethodDoc[] methods) {
+    public static List<MethodDoc> sortedMethods(MethodDoc[] methods) {
         ArrayList<MethodDoc> sortedMethods = new ArrayList<MethodDoc>();
         for (MethodDoc method: methods) {
             if (method.tags("exclude").length == 0) {
@@ -48,24 +48,41 @@ public class ProcessingDoclet {
         return sortedMethods;
     }
     
-    public static List constructorParameters(ConstructorDoc[] constructors) {
-        ArrayList<ParamTag> constructorParameters = new ArrayList<ParamTag>();
-        for (ConstructorDoc constructor: constructors) {
-            ParamTag[] params = constructor.paramTags();
+    public static ExecutableMemberDoc[] overloadedMethods(MethodDoc[] methods, String methodName) {
+        ArrayList<MethodDoc> overloadedMethods = new ArrayList<MethodDoc>();
+        for (MethodDoc method: methods) {
+            if (method.tags("exclude").length == 0) {
+                if (method.name().equals(methodName)) {
+                    overloadedMethods.add(method);
+                }
+            }
+        }
+        Collections.sort(overloadedMethods, new Comparator<MethodDoc>() {
+            public int compare(MethodDoc o1, MethodDoc o2) {
+                return o1.flatSignature().compareTo(o2.flatSignature());
+            }
+        });
+        return overloadedMethods.toArray(new ExecutableMemberDoc[overloadedMethods.size()]);
+    }
+    
+    public static List<ParamTag> parameters(ExecutableMemberDoc[] members) {
+        ArrayList<ParamTag> paramTags = new ArrayList<ParamTag>();
+        for (ExecutableMemberDoc member: members) {
+            ParamTag[] params = member.paramTags();
             for (ParamTag param: params) {
                 boolean found = false;
-                for (ParamTag compare: constructorParameters) {
+                for (ParamTag compare: paramTags) {
                     if (param.parameterName().equals(compare.parameterName())) {
                         found = true;
                         break;
                     }
                 }
                 if (!found) {
-                    constructorParameters.add(param);
+                    paramTags.add(param);
                 }
             }
         }
-        return constructorParameters;
+        return paramTags;
     }
     
     public static String trimLines(String text) {
@@ -111,13 +128,36 @@ public class ProcessingDoclet {
             tmpl.process(data, writer);
             writer.close();
             
-            //// now process each class and its methods
+            //// now process each class and its fields and methods
             for (ClassDoc classDoc: packageDoc.ordinaryClasses()) {
                 tmpl = cfg.getTemplate("class.html");
                 data.put("class", classDoc);
                 writer = new FileWriter(outputPath + File.separator + classDoc.name() + ".html");
                 tmpl.process(data, writer);
                 writer.close();
+                
+                //// extract the param name for the class object used in syntax
+                Tag[] params = classDoc.tags("param");
+                data.put("syntax", params[0]);
+
+                //// process fields
+                tmpl = cfg.getTemplate("field.html");
+                for (FieldDoc fieldDoc: classDoc.fields()) {                    
+                    data.put("field", fieldDoc);
+                    writer = new FileWriter(outputPath + File.separator + classDoc.name() + "_" + fieldDoc.name() + ".html");
+                    tmpl.process(data, writer);
+                    writer.close();
+                }
+                //// process methods
+                tmpl = cfg.getTemplate("method.html");
+                for (MethodDoc methodDoc: ProcessingDoclet.sortedMethods(classDoc.methods())) {
+                    if (methodDoc.tags("exclude").length == 0) {
+                        data.put("method", methodDoc);
+                        writer = new FileWriter(outputPath + File.separator + classDoc.name() + "_" + methodDoc.name() + "_.html");
+                        tmpl.process(data, writer);
+                        writer.close();
+                    }
+                }
             }
             
             //// finally, output the stylesheet

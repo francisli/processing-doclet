@@ -1,11 +1,10 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <title>${class.name()} / ${libraryName}</title>
+        <title>${field.name()} / ${class.name()} / ${libraryName}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="Author" content="<#list class.tags("author") as author>${author.text()}<#if author_has_next>, </#if></#list>" />
-              <link href="style.css" rel="stylesheet" type="text/css" />
+        <link href="style.css" rel="stylesheet" type="text/css" />
     </head>
     <body id="Library-ref" onload="" >
 
@@ -27,12 +26,17 @@
                 </span>
 
                 <table cellpadding="0" cellspacing="0" border="0" class="ref-item">
+                    <tr class="">
+                        <th scope="row">Class</th>
+                        <td><p><a href="${class.name()}.html">${class.name()}</a></p></td>
+                    </tr>
+                    
                     <tr class="name-row">
                         <th scope="row"><!--*-->Name<!--*--></th>
-                        <td><h3>${class.name()}</h3></td>
+                        <td><h3>${field.name()}</h3></td>
                     </tr>
 
-                    <#assign examples = class.tags("example")>
+                    <#assign examples = field.tags("example")>
                     <#if examples?has_content >
                     <tr class="">
                         <th scope="row"><!--*-->Examples<!--*--></th>
@@ -46,62 +50,23 @@
 
                     <tr class="">
                         <th scope="row"><!--*-->Description<!--*--></th>
-                        <td>${class.commentText()}</td>
+                        <td>${field.commentText()}</td>
                     </tr>
 
-                    <#assign fields = class.fields()>
-                    <#if fields?has_content>
                     <tr class="">
-                        <th scope="row">Fields</th>
-                        <td><table cellpadding="0" cellspacing="0" border="0">
-                                <#list fields as field>
-                                <tr class="">
-                                    <th scope="row"><a href="${class.name()}_${field.name()}.html">${field.name()}</a></th>
-                                    <td>${field.commentText()}</td>
-                                </tr>
-                                </#list>
-                            </table></td>
+                        <th scope="row"><!--*-->Syntax<!--*--></th>
+                        <td><pre><kbd>${syntax.parameterName()}</kbd>.${field.name()}</pre></td>
                     </tr>
-                    </#if>
 
-                    <#assign methods = Utils.sortedMethods(class.methods())>
-                    <#if methods?has_content>
-                    <tr class="">
-                        <th scope="row"><!--*-->Methods<!--*--></th>
-                        <td><table cellpadding="0" cellspacing="0" border="0">
-                                <#list methods as method>
-                                <tr class="">
-                                    <th scope="row"><a href="${class.name()}_${method.name()}_.html">${method.name()}()</a></th>
-                                    <td><#list method.firstSentenceTags() as tag>${tag.text()}</#list></td>
-                                </tr>
-                                </#list>
-                            </table></td>
-                    </tr>
-                    </#if>
-
-                    <#assign constructors = class.constructors()>
-                    <#if constructors?has_content>
-                    <tr class="">
-                        <th scope="row"><!--*-->Constructor<!--*--></th>
-                        <td><pre><#list constructors as constructor>${constructor.name()}(<#list constructor.parameters() as param><kbd>${param.name()}</kbd><#if param_has_next>, </#if></#list>)
-</#list></pre></td>
-                    </tr>
-                    </#if>
-
-                    <#assign params = Utils.parameters(class.constructors())>
-                    <#if params?has_content>
                     <tr class="">
                         <th scope="row"><!--*-->Parameters<!--*--></th>
                         <td><table cellpadding="0" cellspacing="0" border="0">
-                                <#list params as param>
                                 <tr class="">
-                                    <th scope="row">${param.parameterName()}</th>
-                                    <td>${param.parameterComment()}</td>
+                                    <th scope="row">${syntax.parameterName()}</th>
+                                    <td>${syntax.parameterComment()}</td>
                                 </tr>
-                                </#list>
                             </table></td>
                     </tr>
-                    </#if>
 
                     <#assign usages = class.tags("usage")>
                     <#if usages?has_content>
