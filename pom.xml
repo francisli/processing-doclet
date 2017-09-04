@@ -6,6 +6,9 @@
   <artifactId>doclet</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
+  <build>
+    <finalName>doclet</finalName>
+  </build>
 
   <name>doclet</name>
   <url>http://maven.apache.org</url>
@@ -25,6 +28,13 @@
       <groupId>org.freemarker</groupId>
       <artifactId>freemarker</artifactId>
       <version>2.3.18</version>
+    </dependency>
+    <dependency>
+      <groupId>sun.jdk</groupId>
+      <artifactId>tools</artifactId>
+      <version>1.5.0</version>
+      <scope>system</scope>
+      <systemPath>${java.home}/../lib/tools.jar</systemPath>
     </dependency>
   </dependencies>
 </project>

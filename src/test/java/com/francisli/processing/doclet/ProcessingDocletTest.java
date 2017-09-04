@@ -7,7 +7,7 @@ import junit.framework.TestSuite;
 /**
  * Unit test for simple App.
  */
-public class ProcessingDocletTest 
+public class ProcessingDocletTest
     extends TestCase {
     /**
      * Create the test case
@@ -28,13 +28,13 @@ public class ProcessingDocletTest
     /**
      * This is currently hard-coded to test generate documentation for
      * another project in my local filesystem.
-     * 
+     *
      */
     public void testProcessingDoclet() {
         com.sun.tools.javadoc.Main.execute(new String[] {
             "-doclet", "com.francisli.processing.doclet.ProcessingDoclet",
-            "-sourcepath", "../http/src/main/java",
-            "com.francisli.processing.http"
+            "-sourcepath", "../processing-restclient/src/main/java",
+            "com.francisli.processing.restclient"
         });
     }
 }
