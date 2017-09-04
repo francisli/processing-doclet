@@ -23,7 +23,7 @@ import java.util.List;
  *
  */
 public class ProcessingDoclet {
-    
+
     public static List<MethodDoc> sortedMethods(MethodDoc[] methods) {
         ArrayList<MethodDoc> sortedMethods = new ArrayList<MethodDoc>();
         for (MethodDoc method: methods) {
@@ -47,7 +47,7 @@ public class ProcessingDoclet {
         });
         return sortedMethods;
     }
-    
+
     public static ExecutableMemberDoc[] overloadedMethods(MethodDoc[] methods, String methodName) {
         ArrayList<MethodDoc> overloadedMethods = new ArrayList<MethodDoc>();
         for (MethodDoc method: methods) {
@@ -64,7 +64,7 @@ public class ProcessingDoclet {
         });
         return overloadedMethods.toArray(new ExecutableMemberDoc[overloadedMethods.size()]);
     }
-    
+
     public static List<ParamTag> parameters(ExecutableMemberDoc[] members) {
         ArrayList<ParamTag> paramTags = new ArrayList<ParamTag>();
         for (ExecutableMemberDoc member: members) {
@@ -84,17 +84,17 @@ public class ProcessingDoclet {
         }
         return paramTags;
     }
-    
+
     public static String trimLines(String text) {
         return text.replaceAll("\n ", "\n");
     }
-    
+
     public static boolean start(RootDoc doc) {
-        
+
         //// set up FreeMarket template config
         Configuration cfg = new Configuration();
         cfg.setClassForTemplateLoading(ProcessingDoclet.class, "/");
-        
+
         //// find output path for files
         String outputPath = ".";
         for (String[] option: doc.options()) {
@@ -103,17 +103,17 @@ public class ProcessingDoclet {
                 break;
             }
         }
-        
+
         try {
             FileWriter writer;
             Template tmpl;
             HashMap data;
-            
+
             //// set up a static methods wrapper for this class
             BeansWrapper wrapper = BeansWrapper.getDefaultInstance();
             TemplateHashModel staticModels = wrapper.getStaticModels();
-            TemplateHashModel utils = (TemplateHashModel) staticModels.get("com.francisli.processing.doclet.ProcessingDoclet");             
-            
+            TemplateHashModel utils = (TemplateHashModel) staticModels.get("com.francisli.processing.doclet.ProcessingDoclet");
+
             //// create main library index file
             tmpl = cfg.getTemplate("index.html");
             data = new HashMap();
@@ -127,7 +127,7 @@ public class ProcessingDoclet {
             writer = new FileWriter(outputPath + File.separator + "index.html");
             tmpl.process(data, writer);
             writer.close();
-            
+
             //// now process each class and its fields and methods
             for (ClassDoc classDoc: packageDoc.ordinaryClasses()) {
                 tmpl = cfg.getTemplate("class.html");
@@ -135,14 +135,16 @@ public class ProcessingDoclet {
                 writer = new FileWriter(outputPath + File.separator + classDoc.name() + ".html");
                 tmpl.process(data, writer);
                 writer.close();
-                
+
                 //// extract the param name for the class object used in syntax
                 Tag[] params = classDoc.tags("param");
-                data.put("syntax", params[0]);
+                if (params.length > 0) {
+                  data.put("syntax", params[0]);
+                }
 
                 //// process fields
                 tmpl = cfg.getTemplate("field.html");
-                for (FieldDoc fieldDoc: classDoc.fields()) {                    
+                for (FieldDoc fieldDoc: classDoc.fields()) {
                     data.put("field", fieldDoc);
                     writer = new FileWriter(outputPath + File.separator + classDoc.name() + "_" + fieldDoc.name() + ".html");
                     tmpl.process(data, writer);
@@ -159,14 +161,14 @@ public class ProcessingDoclet {
                     }
                 }
             }
-            
+
             //// finally, output the stylesheet
             writer = new FileWriter(outputPath + File.separator + "style.css");
             tmpl = cfg.getTemplate("style.css");
             data = new HashMap();
             tmpl.process(data, writer);
             writer.close();
-            
+
             //// and copy the back arrow from resources
             InputStream is = ProcessingDoclet.class.getResourceAsStream("/back_off.gif");
             FileOutputStream os = new FileOutputStream(outputPath + File.separator + "back_off.gif");
@@ -176,11 +178,11 @@ public class ProcessingDoclet {
                 os.write(buffer, 0, bytesRead);
             }
             os.close();
-            is.close();            
+            is.close();
         } catch (Exception e) {
             e.printStackTrace();
-        }   
-        
+        }
+
         return true;
     }
 }
